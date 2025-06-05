@@ -49,3 +49,4 @@ else
 fi
 EOF
 chmod +x /bin/smbcred.sh
+sudo apt install smbclient -y
