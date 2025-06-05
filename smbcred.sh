@@ -1,4 +1,4 @@
-cat <<'EOF' > ~/.smbcred
+cat <<'EOF' > /bin/smbcred.sh
 #!/bin/bash
 
 cred_file="$HOME/.smbcred"
@@ -26,3 +26,4 @@ else
     echo "✅ Credentials already exist in $cred_file"
 fi
 EOF
+chmod +x /bin/smbcred.sh
