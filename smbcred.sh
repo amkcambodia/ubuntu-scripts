@@ -67,5 +67,5 @@ fi
 #else
 #    echo "✅ Credentials already exist"
 #fi
-#EOF
-#chmod +x /bin/smbcred.sh
+EOF
+chmod +x /bin/smbcred.sh
