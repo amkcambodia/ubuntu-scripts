@@ -1,3 +1,4 @@
+cat <<'EOF' > /bin/smbcred.sh
 #!/bin/bash
 
 cred_file="$HOME/.smbcred"
@@ -46,3 +47,5 @@ CRED
 else
     echo "✅ Credentials are valid and not expired."
 fi
+EOF
+chmod +x /bin/smbcred.sh
