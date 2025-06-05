@@ -1,4 +1,4 @@
-cat <<'EOF' > ~/bin/smbcred
+cat <<'EOF' > ~/.smbcred
 #!/bin/bash
 
 cred_file="$HOME/.smbcred"
