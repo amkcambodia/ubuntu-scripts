@@ -43,7 +43,6 @@ fi
 sudo mkdir -p /usr/local/lib/pam-notify
 cat << 'EOF' | sudo tee /usr/local/lib/pam-notify/expired-password-gui.sh > /dev/null
 #!/bin/bash
-#!/bin/bash
 
 MARKER_EXPIRED="/tmp/.password_expired_$PAM_USER"
 MARKER_SAVED_PROMPT="/tmp/.password_save_prompt_$PAM_USER"
@@ -94,3 +93,4 @@ else
     fi
 fi
 EOF
+sudo chmod 644 /usr/local/lib/pam-notify/expired-password-gui.sh
