@@ -38,6 +38,7 @@ nmcli connection add type wifi ifname "$IFACE" con-name "$TARGET_SSID" ssid "$TA
   802-1x.eap peap \
   802-1x.identity "$IDENTITY" \
   802-1x.password "$password" \
+  802-1x.phase2-auth mschapv2 \
   802-1x.ca-cert "$CA_CERT" \
   802-1x.system-ca-certs yes \
   wifi-sec.group ccmp \
