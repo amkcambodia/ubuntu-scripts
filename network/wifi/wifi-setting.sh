@@ -1,37 +1,43 @@
 #!/bin/bash
 
-# Predefined SSID
 TARGET_SSID="AMKBr"
-
-# Auto-detect Wi-Fi interface
 IFACE=$(nmcli -t device status | grep ':wifi:' | cut -d: -f1)
+
 if [[ -z "$IFACE" ]]; then
   echo "❌ No Wi-Fi interface found."
   exit 1
 fi
 
-# Paths to certs
-HOSTNAME_FQDN=$(hostname -f)
-USER_IDENTITY="host/$HOSTNAME_FQDN"
-#CLIENT_CERT="/etc/ssl/certs/${HOSTNAME_FQDN}.pem"
-#PRIVATE_KEY="/etc/ssl/private/${HOSTNAME_FQDN}.key"
 CA_CERT="/etc/ssl/certs/amkcambodia-AMKDC02-CA.pem"
+CRED_FILE="$HOME/.smbcred"
 
-# Check if certs exist
-if [[ ! -f "$CLIENT_CERT" || ! -f "$PRIVATE_KEY" || ! -f "$CA_CERT" ]]; then
-  echo "❌ Required certificate or key not found."
+# Check credentials file
+if [[ ! -f "$CRED_FILE" ]]; then
+  echo "❌ Credential file not found."
   exit 1
 fi
 
-# Add and auto-connect
+# Read credentials securely
+source "$CRED_FILE"
+
+if [[ -z "$username" || -z "$password" ]]; then
+  echo "❌ Username or password not defined."
+  exit 1
+fi
+
+# Construct identity with domain if needed
+if [[ -n "$domain" ]]; then
+  IDENTITY="$domain\\$username"  # Use "\\" to escape backslash
+else
+  IDENTITY="$username"
+fi
+
 echo "🔧 Configuring auto-connect to SSID: $TARGET_SSID"
 nmcli connection add type wifi ifname "$IFACE" con-name "$TARGET_SSID" ssid "$TARGET_SSID" \
   wifi-sec.key-mgmt wpa-eap \
-  802-1x.eap tls \
-  802-1x.identity "$USER_IDENTITY" \
-  802-1x.client-cert "$CLIENT_CERT" \
-  802-1x.private-key "$PRIVATE_KEY" \
-  802-1x.private-key-password-flags 0 \
+  802-1x.eap peap \
+  802-1x.identity "$IDENTITY" \
+  802-1x.password "$password" \
   802-1x.ca-cert "$CA_CERT" \
   802-1x.system-ca-certs yes \
   wifi-sec.group ccmp \
