@@ -23,10 +23,9 @@ EOF
 
 # Set proper permission
 sudo chmod +x /etc/NetworkManager/dispatcher.d/99-wifi-password-recovery
-
 sudo chmod +x /etc/NetworkManager/dispatcher.d/99-wifi-password-recovery
 
-cat <<EOF >/usr/local/bin/wifi-password-recovery.sh
+cat <<EOF > /usr/local/bin/wifi-password-recovery.sh
 #!/bin/bash
 # ---- Configuration ----
 SSID="AMKBr"   # Change this to your Wi-Fi name
