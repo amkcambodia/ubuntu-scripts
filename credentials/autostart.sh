@@ -1,4 +1,4 @@
-cp /etc/xdg/autostart/smbcred.desktop /etc/xdg/autostart/smbcred.desktop.bk
+sudo grep /etc/xdg/autostart/smbcred.desktop && sudo cp /etc/xdg/autostart/smbcred.desktop /etc/xdg/autostart/smbcred.desktop.bk
 cat <<EOF > /etc/xdg/autostart/smbcred.desktop
 [Desktop Entry]
 Type=Application
