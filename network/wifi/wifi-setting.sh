@@ -47,4 +47,5 @@ nmcli connection add type wifi ifname "$IFACE" con-name "$TARGET_SSID" ssid "$TA
 
 echo "✅ Wi-Fi profile created and will auto-connect to $TARGET_SSID."
 EOF
-sudo chmod +x /usr/local/bin/wifi-setting.sh && sudo chmod 644 /usr/local/bin/wifi-setting.sh
+sudo chmod +x /usr/local/bin/wifi-setting.sh
+sudo chmod 644 /usr/local/bin/wifi-setting.sh
