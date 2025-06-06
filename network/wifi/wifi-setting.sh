@@ -10,7 +10,7 @@ if [[ -z "$IFACE" ]]; then
 fi
 
 CA_CERT="/etc/ssl/certs/amkcambodia-AMKDC02-CA.pem"
-CRED_FILE="$HOME/.smbcred"
+CRED_FILE="~/.smbcred"
 
 # Check credentials file
 if [[ ! -f "$CRED_FILE" ]]; then
