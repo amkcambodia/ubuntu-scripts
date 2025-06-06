@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Predefined SSID
-TARGET_SSID="Staff"
+TARGET_SSID="AMKBr"
 
 # Auto-detect Wi-Fi interface
 IFACE=$(nmcli -t device status | grep ':wifi:' | cut -d: -f1)
