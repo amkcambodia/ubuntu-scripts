@@ -9,7 +9,7 @@ if [[ -z "$IFACE" ]]; then
 fi
 
 CA_CERT="/etc/ssl/certs/amkcambodia-AMKDC02-CA.pem"
-CRED_FILE="~/.smbcred"
+CRED_FILE="$HOME/.smbcred"
 
 # Check credentials file
 if [[ ! -f "$CRED_FILE" ]]; then
@@ -45,5 +45,4 @@ nmcli connection add type wifi ifname "$IFACE" con-name "$TARGET_SSID" ssid "$TA
   connection.autoconnect yes
 
 echo "✅ Wi-Fi profile created and will auto-connect to $TARGET_SSID."
-sudo chmod +x /usr/local/bin/wifi-setting.sh
-sudo chmod 644 /usr/local/bin/wifi-setting.sh
+
