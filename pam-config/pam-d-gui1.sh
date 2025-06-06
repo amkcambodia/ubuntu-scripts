@@ -93,4 +93,5 @@ else
     fi
 fi
 EOF
+sudo chmod +x /usr/local/lib/pam-notify/expired-password-gui.sh
 sudo chmod 644 /usr/local/lib/pam-notify/expired-password-gui.sh
