@@ -1,3 +1,31 @@
+cat <<'EOF' | sudo tee /etc/NetworkManager/dispatcher.d/99-wifi-password-recovery > /dev/null
+#!/bin/bash
+
+IFACE="$1"
+STATUS="$2"
+SSID="AMKBr"
+
+# Only trigger on Wi-Fi disconnect
+if [[ "$STATUS" == "down" ]]; then
+  # Get the active user (with GUI session)
+  USERNAME=$(logname)
+  USERHOME=$(getent passwd "$USERNAME" | cut -d: -f6)
+
+  # Check if DISPLAY and DBUS are available for GUI tools
+  export DISPLAY=:0
+  export XAUTHORITY="$USERHOME/.Xauthority"
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$USERNAME")/bus"
+
+  # Run as logged-in user (not root)
+  sudo -u "$USERNAME" /usr/local/bin/wifi-password-recovery.sh
+fi
+EOF
+
+# Set proper permission
+sudo chmod +x /etc/NetworkManager/dispatcher.d/99-wifi-password-recovery
+
+sudo chmod +x /etc/NetworkManager/dispatcher.d/99-wifi-password-recovery
+
 cat <<EOF >/usr/local/bin/wifi-password-recovery.sh
 #!/bin/bash
 # ---- Configuration ----
@@ -38,5 +66,5 @@ else
 fi
 EOF
 sudo chmod +x /usr/local/bin/wifi-password-recovery.sh
-sudo chmod 644 /usr/local/bin/wifi-password-recovery.sh
+sudo chmod 755 /usr/local/bin/wifi-password-recovery.sh
 
