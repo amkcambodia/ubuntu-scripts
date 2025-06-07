@@ -36,9 +36,9 @@ are_credentials_valid() {
 
 # Prompt if no file, invalid file, expired, or test fails
 if [ ! -s "$cred_file" ] || ! grep -q "password=" "$cred_file" || is_cred_expired || ! are_credentials_valid; then
-    domain=$(zenity --entry --title="SMB Login" --text="Enter domain:" --entry-text="${domain:-}")
-    username=$(zenity --entry --title="SMB Login" --text="Enter username:" --entry-text="${username:-}")
-    password=$(zenity --password --title="SMB Login")
+    domain=$(zenity --entry --title="Login" --text="Enter domain:" --entry-text="${domain:-}")
+    username=$(zenity --entry --title="Login" --text="Enter username:" --entry-text="${username:-}")
+    password=$(zenity --password --title="Login")
 
     if [ -n "$username" ] && [ -n "$password" ]; then
         cat <<CRED > "$cred_file"
@@ -47,8 +47,8 @@ password=$password
 domain=$domain
 CRED
         chmod 600 "$cred_file"
-        zenity --info --text="✅ SMB credentials saved/updated successfully."
-        echo "✅ SMB credentials saved/updated"
+        zenity --info --text="✅ The credentials updated successfully."
+        echo "✅ The credentials updated successfully."
     else
         zenity --error --text="❌ Missing credentials. Login failed."
         echo "❌ Missing username or password. Aborted."
@@ -57,5 +57,3 @@ else
     echo "✅ Credentials are valid and not expired."
 fi
 EOF
-chmod +x /bin/smbcred.sh
-sudo apt install smbclient -y
