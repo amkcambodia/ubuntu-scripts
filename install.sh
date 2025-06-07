@@ -29,3 +29,38 @@ fi
 echo "📦 Installing dependencies from $REQUIREMENTS_FILE..."
 pip3 install --user -r "$REQUIREMENTS_FILE"
 echo "✅ Installation complete."
+
+# ----------------------------------------------------------------
+# Configure SSSD Settings
+# shellcheck disable=SC2083
+./sssd/tasks/sssd_setting.sh
+
+# ----------------------------------------------------------------
+
+# Configure smbcred.sh
+echo "⚙️  Configuring smbcred.sh..."
+./credentials/setup_credentials.sh
+
+# ----------------------------------------------------------------
+
+# Configure PAM for expired password GUI notification
+./pam-config/setup_pam.sh
+
+# ----------------------------------------------------------------
+
+# Configure Autostart Prompt
+echo "⚙️  Configuring autostart prompt..."
+sudo cp ./src/autostart-prompt.sh /usr/local/bin/autostart-prompt.sh
+
+# ----------------------------------------------------------------
+
+echo "Configure Network Settings..."
+# Configure Network Autostart Script
+sudo ./network/setup_network_setting.sh
+
+# ----------------------------------------------------------------
+
+# Configure network drive.....
+sudo cp ./map_drive/network-drive.sh
+# ----------------------------------------------------------------
+echo "✅ All configurations completed successfully."

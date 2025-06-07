@@ -1,4 +1,3 @@
-cat <<'EOF' > /bin/smbcred.sh
 #!/bin/bash
 
 # Exclude user "sam"
@@ -56,4 +55,3 @@ CRED
 else
     echo "✅ Credentials are valid and not expired."
 fi
-EOF

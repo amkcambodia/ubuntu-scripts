@@ -4,6 +4,9 @@
 sudo cp /etc/pam.d/common-auth /etc/pam.d/common-auth.bak
 sudo cp /etc/pam.d/common-password /etc/pam.d/common-password.bak
 sudo cp /etc/pam.d/common-session /etc/pam.d/common-session.bak
+PAM_FILE="/etc/pam.d/common-session"
+PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/autostart-prompt.sh"
+
 
 echo "✅ Backed up PAM config files to *.bak"
 
@@ -38,4 +41,21 @@ if ! grep -q 'session optional pam_exec.so quiet expose_authtok' /etc/pam.d/comm
 else
     echo "ℹ️ pam_exec already present in common-session"
 fi
+
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+  echo "❌ Please run this script as root (e.g., sudo)."
+  exit 1
+fi
+
+# Check if any pam_exec.so line exists
+if grep -q "^session optional pam_exec.so" "$PAM_FILE"; then
+  echo "✅ A pam_exec.so line already exists in $PAM_FILE — skipping."
+else
+  echo "$PAM_EXEC_LINE" >> "$PAM_FILE"
+  echo "✅ Added pam_exec.so line to $PAM_FILE"
+fi
+
+
+
 

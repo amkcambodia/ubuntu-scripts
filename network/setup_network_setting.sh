@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# This script installs system dependencies from a requirements file.
+set -e
+
+# Configure LAN configurations
+
+sudo tee /etc/polkit-1/rules.d/50-networkmanager-ubuntu-group.rules > /dev/null <<EOF
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.NetworkManager.settings.modify.system" &&
+        subject.isInGroup("ubuntu-group")) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+
+sudo systemctl restart polkit
+
+# Rename the LAN configuration script to setup_credentials.sh
+echo "Start Configuring LAN settings..."
+
+# Create necessary directories and set permissions
+sudo mkdir -p /usr/local/bin/amk && sudo chmod 755 /usr/local/bin/amk
+
+python3 ./lan/tasks/rename_network.py
+
+echo "Start Configuring LAN settings..."
+
+# Create the setup_lan.sh script in /etc/profile.d
+sudo cp ./lan/template/setup_lan.sh /etc/profile.d/setup_lan.sh
+sudo chmod 755 /etc/profile.d/setup_lan.sh
+
+# Copy the setup_lan.py script to /usr/local/bin/amk
+sudo cp ./lan/template/setup_lan.py /usr/local/bin/amk/setup_lan.py
+sudo chmod 755 /etc/profile.d/setup_lan.sh && sudo chmod +x /etc/profile.d/setup_lan.sh
+sudo chmod 755 /usr/local/bin/amk/setup_lan.py && chmod 755 /usr/local/bin/amk/setup_lan.py
+
+# Configure Wi-Fi settings
+echo "Start Configuring WIFI settings..."
+
+# Create the wifi directory if it doesn't exist
+sudo cp ./wifi/template/wifi-settings.sh /usr/local/bin/amk/wifi-setting.sh
+sudo cp ./wifi/template/setup_lan.sh /etc/profile.d/setup_lan.sh
+sudo chmod 755 /etc/profile.d/setup_lan.sh
+
+# Set permissions for the wifi-setting.sh script
+sudo chmod 644 /usr/local/bin/amk/wifi-setting.sh
+sudo chmod +x /usr/local/bin/amk/wifi-setting.sh

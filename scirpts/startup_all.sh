@@ -6,8 +6,23 @@ exec >> "$LOG" 2>&1
 
 echo "=== $(date) Starting PAM setup ==="
 
-# Run each setup script
-/usr/bin/python3 /path/to/setup_lan.py
-/usr/bin/python3 /path/to/rename_network.py
+# Exit on any error
+set -e
 
-echo "=== $(date) Finished PAM setup ==="
+# 1. Run smbcred.sh first to make sure credentials are set
+#echo "[1/4] Running smbcred.sh..."
+bash /bin/amk/smbcred.sh
+
+# 2. Configure LAN
+#echo "[2/4] Running LAN configuration..."
+/usr/bin/python3 /usr/local/bin/amk/setup_lan.py
+
+# 3. Configure Wi-Fi
+#echo "[3/4] Running Wi-Fi configuration..."
+/usr/bin/python3 /usr/local/bin/amk/wifi-setting.sh
+
+# 4. Rename the network
+#echo "[4/4] Renaming network..."
+#/usr/bin/python3 /usr/local/bin/amk/rename_network.py
+
+echo "=== $(date) PAM setup complete ==="
