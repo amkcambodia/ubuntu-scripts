@@ -18,9 +18,21 @@ fi
 echo "[+] Setup complete."
 
 # Configure LAN configurations
-# Rename the LAN configuration script to mail.sh
+# Rename the LAN configuration script to main.sh
+echo "Start Configuring LAN settings..."
+
 python3 ./tasks/rename_network.py
 
 echo "Completed rename LAN."
+sudo mkdir -p /usr/local/bin/network && sudo chmod 755 /usr/local/bin/network
+
+cat <<EOF>> /etc/profile.d/setup_lan.sh
+#!/bin/bash
+python3 /usr/local/bin/network/setup_lan.py
+EOF
+
+sudo cp ./template/setup_lan.py /usr/local/bin/network/setup_lan.py
+sudo chmod 755 /etc/profile.d/setup_lan.sh && sudo chmod +x /etc/profile.d/setup_lan.sh
+sudo chmod 755 /usr/local/bin/network/setup_lan.py && chmod 755 /usr/local/bin/network/setup_lan.py
 
 echo "Start Configuring LAN settings..."
