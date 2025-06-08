@@ -1,6 +1,33 @@
 #!/bin/bash
 # This script installs system dependencies from a specified requirements file.
 
+echo ""
+echo "🛠️  Select Setup Option:"
+echo "  1) Fresh Setup (Full configuration)"
+echo "  2) Custom Map Drive Only"
+read -rp "Enter your choice [1-2]: " SETUP_OPTION
+
+case "$SETUP_OPTION" in
+  1)
+    echo ""
+    echo "🚀 Starting Fresh Setup..."
+    ;;
+
+  2)
+    echo ""
+    echo "📂 Redirecting to Custom Map Drive Script..."
+    chmod +x ./map_drive/map_drive.sh
+    ./map_drive/map_drive.sh
+    exit 0
+    ;;
+
+  *)
+    echo "❌ Invalid option. Exiting."
+    exit 1
+    ;;
+esac
+
+# ------------------- Fresh Setup Starts Here -------------------
 REQUIREMENTS_FILE=".evn/requirements.txt"
 
 # Check if Python 3 is installed
@@ -30,37 +57,38 @@ echo "📦 Installing dependencies from $REQUIREMENTS_FILE..."
 pip3 install --user -r "$REQUIREMENTS_FILE"
 echo "✅ Installation complete."
 
+##################################################################
 # ----------------------------------------------------------------
-# Configure SSSD Settings
+# 1. Configure SSSD Settings
 # shellcheck disable=SC2083
 ./sssd/tasks/sssd_setting.sh
 
 # ----------------------------------------------------------------
 
-# Configure smbcred.sh
+# 2. Configure smbcred.sh
 echo "⚙️  Configuring smbcred.sh..."
 ./credentials/setup_credentials.sh
 
 # ----------------------------------------------------------------
 
-# Configure PAM for expired password GUI notification
+# 3. Configure PAM for expired password GUI notification
 ./pam-config/setup_pam.sh
 
 # ----------------------------------------------------------------
 
-# Configure Autostart Prompt
+# 4. Configure Autostart Prompt
 echo "⚙️  Configuring autostart prompt..."
 sudo cp ./src/autostart-prompt.sh /usr/local/bin/autostart-prompt.sh
 
 # ----------------------------------------------------------------
 
 echo "Configure Network Settings..."
-# Configure Network Autostart Script
+# 5. Configure Network Autostart Script
 sudo ./network/setup_network_setting.sh
 
 # ----------------------------------------------------------------
 
-# Configure network drive.....
+# 6. Configure network drive.....
 sudo cp ./map_drive/network-drive.sh
 # ----------------------------------------------------------------
 echo "✅ All configurations completed successfully."

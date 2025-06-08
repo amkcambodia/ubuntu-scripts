@@ -1,26 +1,18 @@
 #!/bin/bash
-
-# ------------ Setup credentials ---------------------
-echo ""
-echo "Setup credential ..."
-
-# User and password setup
-source ./lib/credentials.sh
-
 # ------------- Pepare dependency --------------------
 echo ""
-echo "Preparing dependency ..."
+echo "Checking dependencies..."
 echo ""
 
 # Export path for dependency.sh to use
-export REQUIREMENTS_FILE=".env/requirement"
+export REQUIREMENTS_FILE=".env/requirement.txt"
 
 # Run the dependency installer
-source ./scripts/dependency.sh
+source ".evn/dependency.sh"
 
 
 echo ""
-echo "🔧 Preparing SMB Share Paths ..."
+echo "🔧 Preparing Share Paths..."
 echo ""
 
 echo "Select setup type:"
@@ -34,8 +26,8 @@ case "$SETUP_CHOICE" in
         echo "✅ HQ Staff setup selected."
 
         # Load mount and unmount logic if needed
-        source .env/mount_script
-        source .env/umount_script
+        source ../.evn/mount_script
+        source ../.env/umount_script
 
         # Backup old scripts if they exist
         timestamp=$(date +%Y%m%d_%H%M)
@@ -45,12 +37,12 @@ case "$SETUP_CHOICE" in
         # Copy new scripts
         echo ""
         echo "🔧 Creating mount and unmount scripts..."
-        cp ./config/hq/hq-install.sh "$MOUNT_SCRIPT"
-        cp ./scripts/umount-hq.sh "$UMOUNT_SCRIPT"
+        sudo cp ./tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
+        sudo cp ./scripts/umount_hq.sh "$UMOUNT_SCRIPT"
 
         # Make them executable
-        sudo chmod +x "$MOUNT_SCRIPT"
-        sudo chmod +x "$UMOUNT_SCRIPT"
+        sudo chmod 755 "$MOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
+        sudo chmod 755 "$UMOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
 
         echo "✅ Mount script installed at: $MOUNT_SCRIPT"
         echo "✅ Unmount script installed at: $UMOUNT_SCRIPT"
@@ -58,25 +50,42 @@ case "$SETUP_CHOICE" in
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source ./scripts/service_file.sh
+        source ../.env/service_path.sh
+        source ../.evn/mount_script
+        source ../.env/umount_script
+
+        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
+[Unit]
+Description=Mount DFS Share
+After=network-online.target
+Wants=network-online.tar
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=$MOUNT_SCRIPT
+ExecStop=$UMOUNT_SCRIPT
+[Install]
+WantedBy=multi-user.target
+EOF
+        sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
         # --- Reload and enable the service ---
         sudo systemctl daemon-reload
         sudo systemctl enable mount-amkdfs.service
 
         echo ""
-        echo "✅ Mount and unmount scripts created at /usr/local/bin/"
-        echo "✅ Systemd service created: mount-amkdfs.service"
-        echo "👉 Run:   sudo systemctl start mount-amkdfs.service"
-        echo "👉 Run:   sudo systemctl status mount-amkdfs.service"
-        echo "👉 Stop:  sudo systemctl stop mount-amkdfs.service"
+        echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
+        echo "✅ Systemd service created: mount-dfs.service"
+        echo "👉 Run:   sudo systemctl start mount-dfs.service"
+        echo "👉 Run:   sudo systemctl status mount-dfs.service"
+        echo "👉 Stop:  sudo systemctl stop mount-dfs.service"
         ;;
     2)
         echo "✅ Branch Staff setup selected."
 
         # Load mount and unmount logic if needed
-        source .env/mount_script
-        source .env/umount_script
+        source ../.evn/mount_script
+        source ../.env/umount_script
 
         # Backup old scripts if they exist
         timestamp=$(date +%Y%m%d_%H%M)
@@ -86,12 +95,12 @@ case "$SETUP_CHOICE" in
         # Copy new scripts
         echo ""
         echo "🔧 Creating mount and unmount scripts..."
-        cp ./config/branchs/branchs-install.sh "$MOUNT_SCRIPT"
-        cp ./scripts/umount-branchs.sh "$UMOUNT_SCRIPT"
+        sudo cp ./tasks/branch_map_drive.sh "$MOUNT_SCRIPT"
+        sudo cp ./scripts/umount_branch.sh "$UMOUNT_SCRIPT"
 
         # Make them executable
-        sudo chmod +x "$MOUNT_SCRIPT"
-        sudo chmod +x "$UMOUNT_SCRIPT"
+        sudo chmod 755 "$MOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
+        sudo chmod 755 "$UMOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
 
         echo "✅ Mount script installed at: $MOUNT_SCRIPT"
         echo "✅ Unmount script installed at: $UMOUNT_SCRIPT"
@@ -99,30 +108,108 @@ case "$SETUP_CHOICE" in
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source ./script/services_file.sh
+        source ../.env/service_path.sh
+        source ../.evn/mount_script
+        source ../.env/umount_script
 
-        source .env/services_file
-
-        # Make them executable
-        sudo chmod +x "$SERVICE_FILE"
+        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
+[Unit]
+Description=Mount DFS Share
+After=network-online.target
+Wants=network-online.tar
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=$MOUNT_SCRIPT
+ExecStop=$UMOUNT_SCRIPT
+[Install]
+WantedBy=multi-user.target
+EOF
+        sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
         # --- Reload and enable the service ---
         sudo systemctl daemon-reload
         sudo systemctl enable mount-amkdfs.service
 
-        sudo "$MOUNT_SCRIPT"
-
         echo ""
-        echo "✅ Mount and unmount scripts created at /usr/local/bin/"
-        echo "✅ Systemd service created: mount-amkdfs.service"
-        echo "👉 Run:   sudo systemctl start mount-amkdfs.service"
-        echo "👉 Run:   sudo systemctl status mount-amkdfs.service"
-        echo "👉 Stop:  sudo systemctl stop mount-amkdfs.service"
+        echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
+        echo "✅ Systemd service created: mount-dfs.service"
+        echo "👉 Run:   sudo systemctl start mount-dfs.service"
+        echo "👉 Run:   sudo systemctl status mount-dfs.service"
+        echo "👉 Stop:  sudo systemctl stop mount-dfs.service"
         ;;
     3)
-        read -rp "Enter Collaboration Share path (e.g. amkdfs/Collaboration/AHO/ITI): " COLLAB_SHARE_PATH
-        read -rp "Enter Department Share path (e.g. amkdfs/Dept_Doc/CIO/ITI): " DEPT_SHARE_PATH
-        read -rp "Enter Home Drive base path (e.g. amkdfs/StaffDoc/ITD): " HOME_BASE_PATH
+        echo "🛠️  Custom Setup selected."
+        echo ""
+        # Known credential file path
+        source ../.env/service_path
+        source ../.env/credential
+        source ../.env/mount_script
+        source ../.env/umount_script
+
+        # Ensure script directory exists
+        #sudo mkdir -p /usr/local/bin/amk
+        #mkdir -p /media
+
+        if [ ! -d /media ]; then
+            echo "📁 Creating /media directory..."
+            sudo mkdir -p /media
+        else
+            echo "📂 /media already exists."
+        fi
+
+        # Initialize mount/unmount scripts
+        echo "#!/bin/bash" | sudo tee "$MOUNT_SCRIPT" > /dev/null
+        echo "#!/bin/bash" | sudo tee "$UMOUNT_SCRIPT" > /dev/null
+        sudo chmod +x "$MOUNT_SCRIPT" "$UMOUNT_SCRIPT"
+
+        # Loop to accept multiple DFS mount points
+        while true; do
+            echo ""
+            read -rp "🔹 Enter DFS Share path (e.g. //amkdfs/StaffDoc/ITD): " DFS_PATH
+            read -rp "📁 Enter local mount folder (e.g. Home-H): " LOCAL_FOLDER
+
+            MOUNT_POINT="/media/$LOCAL_FOLDER"
+            sudo mkdir -p "$MOUNT_POINT"
+
+            echo "✅ Mapping $DFS_PATH to $MOUNT_POINT"
+
+            echo "sudo mount -t cifs '$DFS_PATH' '$MOUNT_POINT' -o credentials=$CREDENTIAL_FILE,iocharset=utf8,sec=ntlmssp" | sudo tee -a "$MOUNT_SCRIPT" > /dev/null
+            echo "sudo umount '$MOUNT_POINT'" | sudo tee -a "$UMOUNT_SCRIPT" > /dev/null
+
+            read -rp "➕ Add another DFS mount? (y/n): " REPLY
+            [[ "$REPLY" =~ ^[Nn] ]] && break
+        done
+
+        # Create systemd service
+        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
+[Unit]
+Description=Auto Mount DFS Shares
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=$MOUNT_SCRIPT
+ExecStop=$UMOUNT_SCRIPT
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+        # Enable service
+        sudo chmod 644 "$SERVICE_FILE"
+        sudo systemctl daemon-reload
+        sudo systemctl enable mount-dfs.service
+
+        echo ""
+        echo "✅ Setup complete!"
+        echo "🟢 Mount script:   $MOUNT_SCRIPT"
+        echo "🔴 Unmount script: $UMOUNT_SCRIPT"
+        echo "🛡️  Service file:  $SERVICE_FILE"
+        echo ""
+        echo "👉 Use: sudo systemctl start|stop mount-dfs.service"
         ;;
     *)
         echo "❌ Invalid choice. Exiting."
