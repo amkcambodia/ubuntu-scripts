@@ -9,9 +9,8 @@ set -e
 #sudo apt install -y smbclient zenity
 
 # Run and install smbcred.sh
-echo "⚙️  Configuring smbcred.sh..."
 sudo mkdir -p /bin/amk
-sudo cp ./tasks/smbcred.sh /bin/amk/smbcred.sh
+sudo cp ./credentials/tasks/smbcred.sh /bin/amk/smbcred.sh
 sudo chmod 755 /bin/amk/smbcred.sh
 sudo chmod +x /bin/amk/smbcred.sh
 
@@ -26,7 +25,7 @@ if [ -f "$AUTOSTART_FILE" ]; then
 fi
 
 # Copy new autostart file
-sudo cp ./tasks/autostart.sh "$AUTOSTART_FILE"
+sudo cp ./credentials/tasks/autostart.sh "$AUTOSTART_FILE"
 sudo chmod 755 "$AUTOSTART_FILE"
 sudo chmod +x "$AUTOSTART_FILE"
 

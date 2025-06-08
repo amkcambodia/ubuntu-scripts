@@ -8,7 +8,7 @@ echo ""
 export REQUIREMENTS_FILE=".env/requirement.txt"
 
 # Run the dependency installer
-source ".evn/dependency.sh"
+source ".env/dependency.sh"
 
 
 echo ""
@@ -26,8 +26,8 @@ case "$SETUP_CHOICE" in
         echo "✅ HQ Staff setup selected."
 
         # Load mount and unmount logic if needed
-        source ../.evn/mount_script
-        source ../.env/umount_script
+        source ./.env/mount_script
+        source ./.env/umount_script
 
         # Backup old scripts if they exist
         timestamp=$(date +%Y%m%d_%H%M)
@@ -37,8 +37,8 @@ case "$SETUP_CHOICE" in
         # Copy new scripts
         echo ""
         echo "🔧 Creating mount and unmount scripts..."
-        sudo cp ./tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
-        sudo cp ./scripts/umount_hq.sh "$UMOUNT_SCRIPT"
+        sudo cp ./map_drive/tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
+        sudo cp ./map_drive/scripts/umount_hq.sh "$UMOUNT_SCRIPT"
 
         # Make them executable
         sudo chmod 755 "$MOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
@@ -50,9 +50,9 @@ case "$SETUP_CHOICE" in
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source ../.env/service_path.sh
-        source ../.evn/mount_script
-        source ../.env/umount_script
+        source ./.env/service_path
+        source ./.env/mount_script
+        source ./.env/umount_script
 
         sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
@@ -84,8 +84,8 @@ EOF
         echo "✅ Branch Staff setup selected."
 
         # Load mount and unmount logic if needed
-        source ../.evn/mount_script
-        source ../.env/umount_script
+        source .evn/mount_script
+        source .env/umount_script
 
         # Backup old scripts if they exist
         timestamp=$(date +%Y%m%d_%H%M)
@@ -95,8 +95,8 @@ EOF
         # Copy new scripts
         echo ""
         echo "🔧 Creating mount and unmount scripts..."
-        sudo cp ./tasks/branch_map_drive.sh "$MOUNT_SCRIPT"
-        sudo cp ./scripts/umount_branch.sh "$UMOUNT_SCRIPT"
+        sudo cp ./map_drive/tasks/branch_map_drive.sh "$MOUNT_SCRIPT"
+        sudo cp ./map_drive/scripts/umount_branch.sh "$UMOUNT_SCRIPT"
 
         # Make them executable
         sudo chmod 755 "$MOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
@@ -108,9 +108,9 @@ EOF
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source ../.env/service_path.sh
-        source ../.evn/mount_script
-        source ../.env/umount_script
+        source .env/service_path.sh
+        source .evn/mount_script
+        source .env/umount_script
 
         sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
@@ -142,10 +142,10 @@ EOF
         echo "🛠️  Custom Setup selected."
         echo ""
         # Known credential file path
-        source ../.env/service_path
-        source ../.env/credential
-        source ../.env/mount_script
-        source ../.env/umount_script
+        source .env/service_path
+        source .env/credential
+        source .env/mount_script
+        source .env/umount_script
 
         # Ensure script directory exists
         #sudo mkdir -p /usr/local/bin/amk

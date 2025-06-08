@@ -22,16 +22,16 @@ echo "Start Configuring LAN settings..."
 # Create necessary directories and set permissions
 sudo mkdir -p /usr/local/bin/amk && sudo chmod 755 /usr/local/bin/amk
 
-python3 ./lan/tasks/rename_network.py
+#python3 ./network/lan/tasks/rename_network.py
 
-echo "Start Configuring LAN settings..."
+#echo "Start Configuring LAN settings..."
 
 # Create the setup_lan.sh script in /etc/profile.d
-sudo cp ./lan/template/setup_lan.sh /etc/profile.d/setup_lan.sh
+sudo cp ./network/lan/template/setup_lan.sh /etc/profile.d/setup_lan.sh
 sudo chmod 755 /etc/profile.d/setup_lan.sh
 
 # Copy the setup_lan.py script to /usr/local/bin/amk
-sudo cp ./lan/template/setup_lan.py /usr/local/bin/amk/setup_lan.py
+sudo cp ./network/lan/template/setup_lan.py /usr/local/bin/amk/setup_lan.py
 sudo chmod 755 /etc/profile.d/setup_lan.sh && sudo chmod +x /etc/profile.d/setup_lan.sh
 sudo chmod 755 /usr/local/bin/amk/setup_lan.py && chmod 755 /usr/local/bin/amk/setup_lan.py
 
@@ -39,10 +39,11 @@ sudo chmod 755 /usr/local/bin/amk/setup_lan.py && chmod 755 /usr/local/bin/amk/s
 echo "Start Configuring WIFI settings..."
 
 # Create the wifi directory if it doesn't exist
-sudo cp ./wifi/template/wifi-settings.sh /usr/local/bin/amk/wifi-setting.sh
-sudo cp ./wifi/template/setup_lan.sh /etc/profile.d/setup_lan.sh
+sudo cp ./network/wifi/template/wifi-setting.sh /usr/local/bin/amk/wifi-setting.sh
+sudo cp ./network/wifi/template/startup_wifi.sh /etc/profile.d/setup_lan.sh
 sudo chmod 755 /etc/profile.d/setup_lan.sh
 
 # Set permissions for the wifi-setting.sh script
+sudo systemctl daemon-reload
 sudo chmod 644 /usr/local/bin/amk/wifi-setting.sh
 sudo chmod +x /usr/local/bin/amk/wifi-setting.sh

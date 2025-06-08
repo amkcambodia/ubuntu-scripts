@@ -28,7 +28,7 @@ case "$SETUP_OPTION" in
 esac
 
 # ------------------- Fresh Setup Starts Here -------------------
-REQUIREMENTS_FILE=".evn/requirements.txt"
+REQUIREMENTS_FILE=".env/requirements.txt"
 
 # Check if Python 3 is installed
 if ! command -v python3 &>/dev/null; then
@@ -61,7 +61,9 @@ echo "✅ Installation complete."
 # ----------------------------------------------------------------
 # 1. Configure SSSD Settings
 # shellcheck disable=SC2083
+
 ./sssd/tasks/sssd_setting.sh
+sudo systemctl daemon-reload
 
 # ----------------------------------------------------------------
 
@@ -72,13 +74,20 @@ echo "⚙️  Configuring smbcred.sh..."
 # ----------------------------------------------------------------
 
 # 3. Configure PAM for expired password GUI notification
-./pam-config/setup_pam.sh
+./pam-config/setup_pam_d.sh
 
 # ----------------------------------------------------------------
 
 # 4. Configure Autostart Prompt
 echo "⚙️  Configuring autostart prompt..."
-sudo cp ./src/autostart-prompt.sh /usr/local/bin/autostart-prompt.sh
+if [ ! -d /usr/local/bin/amk ]; then
+    echo "📁 Creating /usr/local/bin/amk directory..."
+    sudo mkdir -p /usr/local/bin/amk
+else
+    echo "📂 /media already exists."
+fi
+
+sudo cp ./scipts/startup_all.sh /usr/local/bin/amk/autostart-prompt.sh
 
 # ----------------------------------------------------------------
 
@@ -89,6 +98,6 @@ sudo ./network/setup_network_setting.sh
 # ----------------------------------------------------------------
 
 # 6. Configure network drive.....
-sudo cp ./map_drive/network-drive.sh
+sudo ./map_drive/map_drive.sh
 # ----------------------------------------------------------------
 echo "✅ All configurations completed successfully."

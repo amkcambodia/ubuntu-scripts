@@ -5,7 +5,7 @@ sudo cp /etc/pam.d/common-auth /etc/pam.d/common-auth.bak
 sudo cp /etc/pam.d/common-password /etc/pam.d/common-password.bak
 sudo cp /etc/pam.d/common-session /etc/pam.d/common-session.bak
 PAM_FILE="/etc/pam.d/common-session"
-PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/autostart-prompt.sh"
+PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/amk/autostart-prompt.sh"
 
 
 echo "✅ Backed up PAM config files to *.bak"

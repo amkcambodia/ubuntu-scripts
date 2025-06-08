@@ -34,4 +34,5 @@ sudo chmod 600 "$SSSD_CONF"
 sudo chown root:root "$SSSD_CONF"
 
 # Restart sssd
+sudo systemctl daemon-reload
 sudo systemctl restart sssd && echo "🔄 sssd restarted"
