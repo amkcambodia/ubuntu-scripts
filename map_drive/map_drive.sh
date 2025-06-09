@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 # ------------- Pepare dependency --------------------
 echo ""
 echo "Checking dependencies..."

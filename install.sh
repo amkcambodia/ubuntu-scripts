@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 # This script installs system dependencies from a specified requirements file.
 
 echo ""
@@ -28,7 +31,7 @@ case "$SETUP_OPTION" in
 esac
 
 # ------------------- Fresh Setup Starts Here -------------------
-REQUIREMENTS_FILE=".env/requirements.txt"
+REQUIREMENTS_FILE="./.env/requirements.txt"
 
 # Check if Python 3 is installed
 if ! command -v python3 &>/dev/null; then
@@ -61,6 +64,15 @@ echo "✅ Installation complete."
 # ----------------------------------------------------------------
 # 1. Configure SSSD Settings
 # shellcheck disable=SC2083
+echo "⚙️  Configuring autostart prompt..."
+if [ ! -d /usr/local/bin/amk ]; then
+    echo "📁 Creating /usr/local/bin/amk directory..."
+    sudo mkdir -p /usr/local/bin/amk
+    sudo chmod 755 /usr/local/bin/amk
+else
+    echo "📂 /usr/local/bin/amk already exists."
+fi
+
 
 ./sssd/tasks/sssd_setting.sh
 ./sssd/tasks/allow_restart_mount.sh
@@ -80,13 +92,6 @@ echo "⚙️  Configuring smbcred.sh..."
 # ----------------------------------------------------------------
 
 # 4. Configure Autostart Prompt
-echo "⚙️  Configuring autostart prompt..."
-if [ ! -d /usr/local/bin/amk ]; then
-    echo "📁 Creating /usr/local/bin/amk directory..."
-    sudo mkdir -p /usr/local/bin/amk
-else
-    echo "📂 /media already exists."
-fi
 
 sudo cp ./scipts/startup_all.sh /usr/local/bin/amk/autostart-prompt.sh
 
