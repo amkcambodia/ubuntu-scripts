@@ -25,5 +25,5 @@ mount -t cifs "//$SERVER2/\$BRANCHS_BPR_SHARE_PATH" "\$BPR_MOUNTPOINT" \\
   -o credentials=$CREDENTIALS_FILE,sec=ntlmssp,uid=\$(id -u),gid=\$(id -g),vers=3.0
 
 mountpoint -q "\$COLLAB_MOUNTPOINT" && echo "✅ Collaboration mounted at \$COLLAB_MOUNTPOINT" || echo "❌ Collaboration mount failed"
-mountpoint -q "\$CUD_MOUNTPOINT" && echo "✅ Department mounted at \$CUD_MOUNTPOINT" || echo "❌ Department mount failed"
-mountpoint -q "\$BPR_MOUNTPOINT" && echo "✅ Home Drive mounted at \$BPR_MOUNTPOINT" || echo "❌ Home Drive mount failed"
+mountpoint -q "\$CUD_MOUNTPOINT" && echo "✅ CUD mounted at \$CUD_MOUNTPOINT" || echo "❌ CUD mount failed"
+mountpoint -q "\$BPR_MOUNTPOINT" && echo "✅ Branch Post Report mounted at \$BPR_MOUNTPOINT" || echo "❌ Branch Post Report mount failed"

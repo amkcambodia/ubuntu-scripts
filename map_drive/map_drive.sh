@@ -77,7 +77,7 @@ case "$SETUP_CHOICE" in
         echo "✅ Branch Staff setup selected."
 
         # Load mount and unmount logic if needed
-        source ./.evn/mount_script
+        source ./.env/mount_script
         source ./.env/umount_script
 
         # Backup old scripts if they exist
