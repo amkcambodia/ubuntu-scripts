@@ -101,28 +101,18 @@ case "$SETUP_CHOICE" in
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source .env/service_path.sh
-        source .evn/mount_script
-        source .env/umount_script
+        SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
-        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
-[Unit]
-Description=Mount DFS Share
-After=network-online.target
-Wants=network-online.tar
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=$MOUNT_SCRIPT
-ExecStop=$UMOUNT_SCRIPT
-[Install]
-WantedBy=multi-user.target
-EOF
+        if [ -f /etc/systemd/system/mount-dfs.service ]; then
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        fi
+        
+        ./map_drive/scripts/auto_mount_service.sh
         sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
         # --- Reload and enable the service ---
         sudo systemctl daemon-reload
-        sudo systemctl enable mount-amkdfs.service
+        sudo systemctl enable mount-dfs.service
 
         echo ""
         echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
@@ -135,10 +125,10 @@ EOF
         echo "🛠️  Custom Setup selected."
         echo ""
         # Known credential file path
-        source .env/service_path
-        source .env/credential
-        source .env/mount_script
-        source .env/umount_script
+        source ./.env/service_path
+        source ./.env/credential
+        source ./.env/mount_script
+        source ./.env/umount_script
 
         # Ensure script directory exists
         #sudo mkdir -p /usr/local/bin/amk
@@ -174,35 +164,28 @@ EOF
             [[ "$REPLY" =~ ^[Nn] ]] && break
         done
 
-        # Create systemd service
-        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
-[Unit]
-Description=Auto Mount DFS Shares
-After=network-online.target
-Wants=network-online.target
+         # --- Create the systemd service ---
+        echo ""
+        echo "🔧 Creating auto mount services ..."
+        SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
-[Service]
-Type=oneshot
-RemainAfterExit=true
-ExecStart=$MOUNT_SCRIPT
-ExecStop=$UMOUNT_SCRIPT
+        if [ -f /etc/systemd/system/mount-dfs.service ]; then
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        fi
+        
+        ./map_drive/scripts/auto_mount_service.sh
+        sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
-[Install]
-WantedBy=multi-user.target
-EOF
-
-        # Enable service
-        sudo chmod 644 "$SERVICE_FILE"
+        # --- Reload and enable the service ---
         sudo systemctl daemon-reload
         sudo systemctl enable mount-dfs.service
 
         echo ""
-        echo "✅ Setup complete!"
-        echo "🟢 Mount script:   $MOUNT_SCRIPT"
-        echo "🔴 Unmount script: $UMOUNT_SCRIPT"
-        echo "🛡️  Service file:  $SERVICE_FILE"
-        echo ""
-        echo "👉 Use: sudo systemctl start|stop mount-dfs.service"
+        echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
+        echo "✅ Systemd service created: mount-dfs.service"
+        echo "👉 Run:   sudo systemctl start mount-dfs.service"
+        echo "👉 Run:   sudo systemctl status mount-dfs.service"
+        echo "👉 Stop:  sudo systemctl stop mount-dfs.service"
         ;;
     *)
         echo "❌ Invalid choice. Exiting."
