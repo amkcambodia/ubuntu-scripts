@@ -1,6 +1,6 @@
-source ./.env/service_path
-source ./.env/mount_script
-source ./.env/umount_scrip
+SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
+MOUNT_SCRIPT="/usr/local/bin/amk/mount-dfs.sh"
+UMOUNT_SCRIPT="/usr/local/bin/amk/umount-dfs.sh"
 
 sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]

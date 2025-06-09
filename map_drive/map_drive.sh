@@ -53,7 +53,7 @@ case "$SETUP_CHOICE" in
         # --- Create the systemd service ---
         echo ""
         echo "🔧 Creating auto mount services ..."
-        source ./.env/service_path
+        SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
         ./map_drive/scripts/auto_mount_service.sh
         sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
