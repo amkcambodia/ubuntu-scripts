@@ -54,9 +54,9 @@ case "$SETUP_CHOICE" in
         echo ""
         echo "🔧 Creating auto mount services ..."
         SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
-        
-        if [ -f ./map_drive/scripts/auto_mount_service.sh ]; then
-        mv ./map_drive/scripts/auto_mount_service.sh ./map_drive/scripts/auto_mount_service.sh.bk-$(date +"%Y%m%d-%H%M%S")
+
+        if [ -f /etc/systemd/system/mount-dfs.service ]; then
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
         fi
         
         ./map_drive/scripts/auto_mount_service.sh
