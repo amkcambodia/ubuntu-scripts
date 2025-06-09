@@ -1,7 +1,5 @@
 source ./.env/service_path
-
 source ./.env/mount_script
-
 source ./.env/umount_scrip
 
 sudo tee "$SERVICE_FILE" > /dev/null <<EOF

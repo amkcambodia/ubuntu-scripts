@@ -54,7 +54,7 @@ case "$SETUP_CHOICE" in
         echo ""
         echo "🔧 Creating auto mount services ..."
         source ./.env/service_path
-        sudo ./map_drive/scripts/auto_mount_service.sh
+        ./map_drive/scripts/auto_mount_service.sh
         sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
         # --- Reload and enable the service ---
