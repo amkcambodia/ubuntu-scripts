@@ -6,7 +6,7 @@ sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
 Description=Mount DFS Share
 After=network-online.target
-Wants=network-online.tar
+Wants=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
