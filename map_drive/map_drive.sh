@@ -64,7 +64,7 @@ case "$SETUP_CHOICE" in
 
         # --- Reload and enable the service ---
         sudo systemctl daemon-reload
-        sudo systemctl enable mount-amkdfs.service
+        sudo systemctl enable mount-dfs.service
 
         echo ""
         echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
