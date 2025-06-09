@@ -56,7 +56,8 @@ case "$SETUP_CHOICE" in
         SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
         if [ -f /etc/systemd/system/mount-dfs.service ]; then
-        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        sudo mkdir -p /etc/systemd/system/backup && sudo chmod 755 /etc/systemd/system/backup
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/backup/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
         fi
         
         ./map_drive/scripts/auto_mount_service.sh
@@ -104,7 +105,8 @@ case "$SETUP_CHOICE" in
         SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
         if [ -f /etc/systemd/system/mount-dfs.service ]; then
-        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        sudo mkdir -p /etc/systemd/system/backup && sudo chmod 755 /etc/systemd/system/backup
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/backup/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
         fi
         
         ./map_drive/scripts/auto_mount_service.sh
@@ -130,6 +132,12 @@ case "$SETUP_CHOICE" in
         source ./.env/mount_script
         source ./.env/umount_script
 
+        # Backup old scripts if they exist
+        timestamp=$(date +%Y%m%d_%H%M)
+        [ -f "$MOUNT_SCRIPT" ] && cp "$MOUNT_SCRIPT" "$MOUNT_SCRIPT.bak.$timestamp"
+        [ -f "$UMOUNT_SCRIPT" ] && cp "$UMOUNT_SCRIPT" "$UMOUNT_SCRIPT.bak.$timestamp"
+
+
         # Ensure script directory exists
         #sudo mkdir -p /usr/local/bin/amk
         #mkdir -p /media
@@ -150,7 +158,7 @@ case "$SETUP_CHOICE" in
         while true; do
             echo ""
             read -rp "🔹 Enter DFS Share path (e.g. //amkdfs/StaffDoc/ITD): " DFS_PATH
-            read -rp "📁 Enter local mount folder (e.g. Home-H): " LOCAL_FOLDER
+            read -rp "📁 Enter local mount folder (e.g. Deptpartment-N): " LOCAL_FOLDER
 
             MOUNT_POINT="/media/$LOCAL_FOLDER"
             sudo mkdir -p "$MOUNT_POINT"
@@ -170,7 +178,8 @@ case "$SETUP_CHOICE" in
         SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
         if [ -f /etc/systemd/system/mount-dfs.service ]; then
-        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        sudo mkdir -p /etc/systemd/system/backup && sudo chmod 755 /etc/systemd/system/backup
+        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/backup/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
         fi
         
         ./map_drive/scripts/auto_mount_service.sh
