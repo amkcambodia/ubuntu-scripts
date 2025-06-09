@@ -11,7 +11,7 @@ echo ""
 export REQUIREMENTS_FILE="./.env/requirements.txt"
 
 # Run the dependency installer
-source "./.env/check_ dependency.sh"
+source "./.env/check_dependency.sh"
 
 
 echo ""
