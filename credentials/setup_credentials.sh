@@ -8,12 +8,6 @@ set -e
 #sudo apt update
 #sudo apt install -y smbclient zenity
 
-if [ ! -d /etc/smbcred ]; then
-    echo "📁 Setting up credential directory..."
-    sudo mkdir -p /etc/smbcred
-else
-    echo "📂 Credential already exists."
-fi
 # Run and install smbcred.sh
 sudo mkdir -p /bin/amk
 #sudo cp ./credentials/tasks/smbcred.sh /bin/amk/smbcred.sh

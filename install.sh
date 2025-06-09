@@ -139,6 +139,16 @@ sudo systemctl daemon-reload
 
 # 2. Configure smbcred.sh
 echo "⚙️  Configuring smbcred.sh..."
+
+if [ ! -d /etc/smbcred ]; then
+    echo "📁 Setting up credential directory..."
+    sudo mkdir -p /etc/smbcred
+    sudo chown root:ubuntu-group /etc/smbcred
+    sudo chmod 1770 /etc/smbcred
+else
+    echo "📂 Credential already exists."
+fi
+
 ./credentials/setup_credentials.sh
 
 # ----------------------------------------------------------------

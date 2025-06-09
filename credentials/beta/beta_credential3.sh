@@ -64,7 +64,7 @@ password=$password
 domain=$domain
 CRED
         chmod 600 "$cred_file"
-        chown root:root "$cred_file"
+        chown "$USER":"$USER" "$cred_file"
         zenity --info --text="✅ Credentials updated successfully."
         echo "✅ Credentials updated successfully."
     else
