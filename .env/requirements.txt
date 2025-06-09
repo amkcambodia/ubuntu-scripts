@@ -4,6 +4,5 @@ adsys
 certmonger
 python3-cepces
 adcli
-polkit
 cifs-utils
 libpam-mount

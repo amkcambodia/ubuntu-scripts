@@ -150,7 +150,8 @@ echo "⚙️  Configuring smbcred.sh..."
 
 # 4. Configure Autostart Prompt
 
-sudo cp ./scipts/startup_all.sh /usr/local/bin/amk/autostart-prompt.sh
+#sudo cp ./script/startup_all.sh /usr/local/bin/amk/autostart-prompt.sh
+sudo bash -c '[ -f /usr/local/bin/amk/autostart-prompt.sh ] && mv /usr/local/bin/amk/autostart-prompt.sh /usr/local/bin/amk/autostart-prompt.sh.bk; cp ./script/startup_all.sh /usr/local/bin/amk/autostart-prompt.sh'
 
 # ----------------------------------------------------------------
 

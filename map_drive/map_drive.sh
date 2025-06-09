@@ -8,10 +8,10 @@ echo "Checking dependencies..."
 echo ""
 
 # Export path for dependency.sh to use
-export REQUIREMENTS_FILE=".env/requirement.txt"
+export REQUIREMENTS_FILE="./.env/requirements.txt"
 
 # Run the dependency installer
-source ".env/dependency.sh"
+source "./.env/check_ dependency.sh"
 
 
 echo ""
@@ -56,20 +56,7 @@ case "$SETUP_CHOICE" in
         source ./.env/service_path
         source ./.env/mount_script
         source ./.env/umount_script
-
-        sudo tee "$SERVICE_FILE" > /dev/null <<EOF
-[Unit]
-Description=Mount DFS Share
-After=network-online.target
-Wants=network-online.tar
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=$MOUNT_SCRIPT
-ExecStop=$UMOUNT_SCRIPT
-[Install]
-WantedBy=multi-user.target
-EOF
+        sudo ./map_drive/scripts/auto_mount_service.sh
         sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
 
         # --- Reload and enable the service ---
