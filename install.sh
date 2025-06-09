@@ -4,6 +4,94 @@ set -e
 
 # This script installs system dependencies from a specified requirements file.
 
+
+#!/bin/bash
+
+REQUIREMENTS_FILE="./.env/requirements.txt"
+
+if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
+  echo "❌ Requirements file not found: $REQUIREMENTS_FILE"
+  exit 1
+fi
+
+echo "📦 Updating package list..."
+sudo apt update
+
+echo "🔍 Installing packages listed in $REQUIREMENTS_FILE..."
+
+while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+  if [[ -n "$pkg" && ! "$pkg" =~ ^# ]]; then
+    if dpkg -l | grep -qw "$pkg"; then
+      echo "✅ $pkg is already installed."
+    else
+      echo "📦 Installing $pkg..."
+      sudo apt install -y "$pkg"
+    fi
+  fi
+done < "$REQUIREMENTS_FILE"
+
+echo "✅ All required packages processed."
+
+#----------------------------------------------
+#REQUIREMENTS_FILE="./.env/requirements.txt"
+#VENV_DIR="./.env/venv"
+#
+## Check if Python 3 is installed
+#if ! command -v python3 &>/dev/null; then
+#  echo "❌ Python 3 is not installed. Installing..."
+#  sudo apt update && sudo apt install -y python3
+#else
+#  echo "✅ Python 3 is already installed."
+#fi
+#
+## Check if pip3 is installed
+#if ! command -v pip3 &>/dev/null; then
+#  echo "❌ pip3 is not installed. Installing..."
+#  sudo apt install -y python3-pip
+#else
+#  echo "✅ pip3 is already installed."
+#fi
+#
+## Check if python3-venv is installed
+#if ! dpkg -l | grep -q python3-venv; then
+#  echo "❌ python3-venv is not installed. Installing..."
+#  sudo apt install -y python3-venv
+#else
+#  echo "✅ python3-venv is already installed."
+#fi
+#
+## Check for requirements file
+#if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
+#  echo "❌ Requirements file not found: $REQUIREMENTS_FILE"
+#  exit 1
+#fi
+#
+## Create virtual environment if not exists
+#if [[ ! -d "$VENV_DIR" ]]; then
+#  echo "🔧 Creating virtual environment..."
+#  python3 -m venv "$VENV_DIR"
+#fi
+#
+## Activate virtual environment
+#echo "🚀 Activating virtual environment..."
+#source "$VENV_DIR/bin/activate"
+#
+## Upgrade pip inside venv
+#pip install --upgrade pip
+#
+## Install requirements
+#echo "📦 Installing Python packages from $REQUIREMENTS_FILE..."
+#pip install -r "$REQUIREMENTS_FILE"
+#
+#echo "✅ Setup complete. Virtual environment located at: $VENV_DIR"
+#
+## Install packages
+#echo "📦 Installing dependencies from $REQUIREMENTS_FILE..."
+#pip3 install --user -r "$REQUIREMENTS_FILE"
+#echo "✅ Installation complete."
+
+##################################################################
+# ------------------- Fresh Setup Starts Here -------------------
 echo ""
 echo "🛠️  Select Setup Option:"
 echo "  1) Fresh Setup (Full configuration)"
@@ -30,89 +118,6 @@ case "$SETUP_OPTION" in
     ;;
 esac
 
-# ------------------- Fresh Setup Starts Here -------------------
-#REQUIREMENTS_FILE="./.env/requirements.txt"
-#
-## Check if Python 3 is installed
-#if ! command -v python3 &>/dev/null; then
-#  echo "❌ Python 3 is not installed. Installing..."
-#  sudo apt update && sudo apt install -y python3
-#else
-#  echo "✅ Python 3 is already installed."
-#fi
-#
-## Check if pip3 is installed
-#if ! command -v pip3 &>/dev/null; then
-#  echo "❌ pip3 is not installed. Installing..."
-#  sudo apt install -y python3-pip
-#else
-#  echo "✅ pip3 is already installed."
-#fi
-#
-## Check for requirements file
-#if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
-#  echo "❌ Requirements file not found: $REQUIREMENTS_FILE"
-#  exit 1
-#fi
-
-REQUIREMENTS_FILE="./.env/requirements.txt"
-VENV_DIR="./.env/venv"
-
-# Check if Python 3 is installed
-if ! command -v python3 &>/dev/null; then
-  echo "❌ Python 3 is not installed. Installing..."
-  sudo apt update && sudo apt install -y python3
-else
-  echo "✅ Python 3 is already installed."
-fi
-
-# Check if pip3 is installed
-if ! command -v pip3 &>/dev/null; then
-  echo "❌ pip3 is not installed. Installing..."
-  sudo apt install -y python3-pip
-else
-  echo "✅ pip3 is already installed."
-fi
-
-# Check if python3-venv is installed
-if ! dpkg -l | grep -q python3-venv; then
-  echo "❌ python3-venv is not installed. Installing..."
-  sudo apt install -y python3-venv
-else
-  echo "✅ python3-venv is already installed."
-fi
-
-# Check for requirements file
-if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
-  echo "❌ Requirements file not found: $REQUIREMENTS_FILE"
-  exit 1
-fi
-
-# Create virtual environment if not exists
-if [[ ! -d "$VENV_DIR" ]]; then
-  echo "🔧 Creating virtual environment..."
-  python3 -m venv "$VENV_DIR"
-fi
-
-# Activate virtual environment
-echo "🚀 Activating virtual environment..."
-source "$VENV_DIR/bin/activate"
-
-# Upgrade pip inside venv
-pip install --upgrade pip
-
-# Install requirements
-echo "📦 Installing Python packages from $REQUIREMENTS_FILE..."
-pip install -r "$REQUIREMENTS_FILE"
-
-echo "✅ Setup complete. Virtual environment located at: $VENV_DIR"
-
-# Install packages
-echo "📦 Installing dependencies from $REQUIREMENTS_FILE..."
-pip3 install --user -r "$REQUIREMENTS_FILE"
-echo "✅ Installation complete."
-
-##################################################################
 # ----------------------------------------------------------------
 # 1. Configure SSSD Settings
 # shellcheck disable=SC2083
