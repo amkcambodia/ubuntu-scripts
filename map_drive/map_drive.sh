@@ -40,7 +40,8 @@ case "$SETUP_CHOICE" in
         # Copy new scripts
         echo ""
         echo "🔧 Creating mount and unmount scripts..."
-        sudo cp ./map_drive/tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
+        # sudo cp ./map_drive/tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
+        sudo cp ./map_drive/meta/beta_hq_map.sh "$MOUNT_SCRIPT"
         sudo cp ./map_drive/scripts/umount_hq.sh "$UMOUNT_SCRIPT"
 
         # Make them executable

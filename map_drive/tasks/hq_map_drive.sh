@@ -52,7 +52,7 @@
 
 # DFS CIFS Mount Script for AMK
 
-USERNAME="$(whoami)"
+USERNAME="$(logname)"
 SERVER="amkcambodia.com"
 CREDENTIALS_FILE="$HOME/.smbcred"
 
