@@ -15,11 +15,11 @@ cred_file="$CRED_DIR/$USERNAME"
 cred_age_days=90
 test_share="//amkcambodia.com/netlogon"
 
-# Check if running as root since /etc/smbcred needs root permissions
-if [ "$(id -u)" -ne 0 ]; then
-    echo "❌ This script must be run as root to access $CRED_DIR"
-    exit 1
-fi
+# # Check if running as root since /etc/smbcred needs root permissions
+# if [ "$(id -u)" -ne 0 ]; then
+#     echo "❌ This script must be run as root to access $CRED_DIR"
+#     exit 1
+# fi
 
 # Function to check if credentials file is older than X days
 is_cred_expired() {

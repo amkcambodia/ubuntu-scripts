@@ -23,8 +23,6 @@ sudo chmod +x /bin/amk/smbcred.sh
 AUTOSTART_FILE="/etc/xdg/autostart/smbcred.desktop"
 echo "🚀 Setting up autostart for smbcred..."
 
-# ----------------------------------------------------------------------------------
-
 # Backup existing autostart file if it exists
 if [ -f "$AUTOSTART_FILE" ]; then
   echo "🗂️  Backing up existing $AUTOSTART_FILE..."
