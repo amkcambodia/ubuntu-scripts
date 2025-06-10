@@ -173,5 +173,7 @@ sudo ./network/setup_network_setting.sh
 
 # 6. Configure network drive.....
 sudo ./map_drive/map_drive.sh
+
 # ----------------------------------------------------------------
+
 echo "✅ All configurations completed successfully."

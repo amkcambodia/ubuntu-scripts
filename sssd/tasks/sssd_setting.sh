@@ -3,12 +3,23 @@
 SSSD_CONF="/etc/sssd/sssd.conf"
 BACKUP_PATH="/etc/sssd/sssd.conf.bak"
 
+# ----------------------------------------------------------------------------------
+
+# Error stop
+set -e
+
+# ----------------------------------------------------------------------------------
+
 # Create a backup first
 sudo cp "$SSSD_CONF" "$BACKUP_PATH"
 echo "📦 Backup saved to $BACKUP_PATH"
 
+# ----------------------------------------------------------------------------------
+
 # Comment out fallback_homedir = /home/%u@%d
 sudo sed -i 's/^\(fallback_homedir *= */home\/%u@%d.*\)/# \1/' "$SSSD_CONF"
+
+# ----------------------------------------------------------------------------------
 
 # Ensure fallback_homedir = /home/%u exists
 if ! grep -q "^fallback_homedir *= */home/%u" "$SSSD_CONF"; then
@@ -18,8 +29,12 @@ else
     echo "ℹ️ Already configured: fallback_homedir = /home/%u"
 fi
 
+# ----------------------------------------------------------------------------------
+
 # Comment out access_provider = ad
 sudo sed -i 's/^\(access_provider *= *ad\)/# \1/' "$SSSD_CONF"
+
+# ----------------------------------------------------------------------------------
 
 # Ensure access_provider = simple exists
 if ! grep -q "^access_provider *= *simple" "$SSSD_CONF"; then
@@ -29,9 +44,13 @@ else
     echo "ℹ️ Already configured: access_provider = simple"
 fi
 
+# ----------------------------------------------------------------------------------
+
 # Ensure correct permissions
 sudo chmod 600 "$SSSD_CONF"
 sudo chown root:root "$SSSD_CONF"
+
+# ----------------------------------------------------------------------------------
 
 # Restart sssd
 sudo systemctl daemon-reload

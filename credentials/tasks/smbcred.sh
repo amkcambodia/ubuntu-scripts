@@ -8,10 +8,14 @@ for u in "${excluded_users[@]}"; do
         exit 0
     fi
 done
-# -------------------------
+
+# ----------------------------------------------------------------------------------
+
 cred_file="$HOME/.smbcred"
 cred_age_days=90
 test_share="//amkcambodia.com/netlogon"
+
+# ----------------------------------------------------------------------------------
 
 # Function to check if credentials file is older than X days
 is_cred_expired() {
@@ -24,11 +28,15 @@ is_cred_expired() {
     [ "$age" -ge "$cred_age_days" ]
 }
 
+# ----------------------------------------------------------------------------------
+
 # Function to test current credentials using smbclient
 are_credentials_valid() {
     smbclient "$test_share" -A "$cred_file" -c "exit" &>/dev/null
     return $?
 }
+
+# ----------------------------------------------------------------------------------
 
 # Load username from file if exists
 [ -f "$cred_file" ] && . "$cred_file"
@@ -55,3 +63,5 @@ CRED
 else
     echo "✅ Credentials are valid and not expired."
 fi
+
+# ----------------------------------------------------------------------------------
