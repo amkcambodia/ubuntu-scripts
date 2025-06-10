@@ -6,7 +6,7 @@ BACKUP_PATH="/etc/sssd/sssd.conf.bak"
 # ----------------------------------------------------------------------------------
 
 # Error stop
-set -e
+# set -e
 
 # ----------------------------------------------------------------------------------
 
@@ -16,10 +16,19 @@ echo "📦 Backup saved to $BACKUP_PATH"
 
 # ----------------------------------------------------------------------------------
 
-# Comment out fallback_homedir = /home/%u@%d
-sudo sed -i 's/^\(fallback_homedir *= */home\/%u@%d.*\)/# \1/' "$SSSD_CONF"
+# # Comment out fallback_homedir = /home/%u@%d
+# sudo sed -i 's/^\(fallback_homedir *= */home\/%u@%d*\)/# \1/' "$SSSD_CONF"
 
-# ----------------------------------------------------------------------------------
+# # Ensure fallback_homedir = /home/%u exists
+# if ! grep -q "^fallback_homedir *= */home/%u" "$SSSD_CONF"; then
+#     echo "fallback_homedir = /home/%u" | sudo tee -a "$SSSD_CONF" > /dev/null
+#     echo "✅ Added: fallback_homedir = /home/%u"
+# else
+#     echo "ℹ️ Already configured: fallback_homedir = /home/%u"
+# fi
+
+# Comment out any line starting with fallback_homedir =
+sudo sed -i 's/^\(fallback_homedir *=.*\)/# \1/' "$SSSD_CONF"
 
 # Ensure fallback_homedir = /home/%u exists
 if ! grep -q "^fallback_homedir *= */home/%u" "$SSSD_CONF"; then
@@ -29,12 +38,11 @@ else
     echo "ℹ️ Already configured: fallback_homedir = /home/%u"
 fi
 
+
 # ----------------------------------------------------------------------------------
 
 # Comment out access_provider = ad
 sudo sed -i 's/^\(access_provider *= *ad\)/# \1/' "$SSSD_CONF"
-
-# ----------------------------------------------------------------------------------
 
 # Ensure access_provider = simple exists
 if ! grep -q "^access_provider *= *simple" "$SSSD_CONF"; then
@@ -42,6 +50,19 @@ if ! grep -q "^access_provider *= *simple" "$SSSD_CONF"; then
     echo "✅ Added: access_provider = simple"
 else
     echo "ℹ️ Already configured: access_provider = simple"
+fi
+
+# ----------------------------------------------------------------------------------
+
+# Comment out use_fully_qualified_names = True
+sudo sed -i 's/^\(use_fully_qualified_names *= *True\)/# \1/' "$SSSD_CONF"
+
+# Ensure access_provider = simple exists
+if ! grep -q "^use_fully_qualified_names *= *False" "$SSSD_CONF"; then
+    echo "use_fully_qualified_names = False" | sudo tee -a "$SSSD_CONF" > /dev/null
+    echo "✅ Added: use_fully_qualified_names = False"
+else
+    echo "ℹ️ Already configured: use_fully_qualified_names = False"
 fi
 
 # ----------------------------------------------------------------------------------
