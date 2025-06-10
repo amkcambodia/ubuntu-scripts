@@ -8,7 +8,7 @@ USER_ID=$(id -u "$USERNAME")
 GROUP_ID=$(id -g "$USERNAME")
 
 SERVER="amkcambodia.com"
-CREDENTIALS_FILE="/etc/.smbcred"
+CREDENTIALS_FILE="/etc/smbcred/$USERNAME"
 
 # DFS base share
 DFS_ROOT="amkdfs"

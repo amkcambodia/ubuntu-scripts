@@ -63,5 +63,3 @@ CRED
 else
     echo "✅ Credentials are valid and not expired."
 fi
-
-# ----------------------------------------------------------------------------------
