@@ -5,7 +5,6 @@ sudo cp /etc/pam.d/common-auth /etc/pam.d/common-auth.bak
 sudo cp /etc/pam.d/common-password /etc/pam.d/common-password.bak
 sudo cp /etc/pam.d/common-session /etc/pam.d/common-session.bak
 PAM_FILE="/etc/pam.d/common-session"
-PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/amk/autostart-prompt.sh"
 PAM_EXEC_PROFILE='session optional pam_exec.so /usr/local/bin/fix_dconf_profile.sh'
 
 # ----------------------------------------------------------------
@@ -61,13 +60,15 @@ else
 fi
 
 # ----------------------------------------------------------------
+PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/amk/autostart-prompt.sh"
+PAM_D_FILE="/etc/pam.d/common-session"
 
 # Check if any pam_exec.so line exists
-if grep -q "^session optional pam_exec.so" "$PAM_FILE"; then
-  echo "✅ A pam_exec.so line already exists in $PAM_FILE — skipping."
+if grep -q "^session optional pam_exec.so" "$PAM_D_FILE"; then
+  echo "✅ A pam_exec.so line already exists in $PAM_D_FILE — skipping."
 else
-  echo "$PAM_EXEC_LINE" >> "$PAM_FILE"
-  echo "✅ Added pam_exec.so line to $PAM_FILE"
+  echo "$PAM_EXEC_LINE" >> "$PAM_D_FILE"
+  echo "✅ Added pam_exec.so line to $PAM_D_FILE"
 fi
 
 # ----------------------------------------------------------------

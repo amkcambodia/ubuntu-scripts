@@ -15,11 +15,12 @@ bash /bin/amk/smbcred.sh
 
 # 2. Configure LAN
 #echo "[2/4] Running LAN configuration..."
-/usr/bin/python3 /usr/local/bin/amk/setup_lan.py
+#/usr/bin/python3 /usr/local/bin/amk/setup_lan.py
+/bin/bash /usr/local/bin/amk/setup_lan.sh
 
 # 3. Configure Wi-Fi
 #echo "[3/4] Running Wi-Fi configuration..."
-/usr/bin/python3 /usr/local/bin/amk/wifi-setting.sh
+/bin/bash /usr/local/bin/amk/wifi-setting.sh
 
 # 4. Rename the network
 #echo "[4/4] Renaming network..."

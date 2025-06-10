@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 /usr/local/bin/amk/setup_lan.py
+/bin/bash /usr/local/bin/amk/lan_config.sh

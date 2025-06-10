@@ -8,8 +8,9 @@ if [[ -z "$IFACE" ]]; then
   exit 1
 fi
 
+USERNAME=(logname)
 CA_CERT="/etc/ssl/certs/amkcambodia-AMKDC02-CA.pem"
-CRED_FILE="$HOME/.smbcred"
+CRED_FILE="/etc/smbcred/$USERNAME"
 
 # Check credentials file
 if [[ ! -f "$CRED_FILE" ]]; then
