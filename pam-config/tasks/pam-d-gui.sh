@@ -6,7 +6,9 @@ sudo cp /etc/pam.d/common-password /etc/pam.d/common-password.bak
 sudo cp /etc/pam.d/common-session /etc/pam.d/common-session.bak
 PAM_FILE="/etc/pam.d/common-session"
 PAM_EXEC_LINE="session optional pam_exec.so /usr/local/bin/amk/autostart-prompt.sh"
+PAM_EXEC_PROFILE='session optional pam_exec.so /usr/local/bin/fix_dconf_profile.sh'
 
+# ----------------------------------------------------------------
 
 echo "✅ Backed up PAM config files to *.bak"
 
@@ -18,6 +20,8 @@ else
     echo "ℹ️ pam_sss already present in common-auth"
 fi
 
+# ----------------------------------------------------------------
+
 # ✅ Enable password change for expired AD accounts
 if ! grep -q '^password[[:space:]]\+\[success=1 default=ignore\][[:space:]]\+pam_sss.so' /etc/pam.d/common-password; then
     echo 'password   [success=1 default=ignore]   pam_sss.so use_authtok' | sudo tee -a /etc/pam.d/common-password > /dev/null
@@ -25,6 +29,8 @@ if ! grep -q '^password[[:space:]]\+\[success=1 default=ignore\][[:space:]]\+pam
 else
     echo "ℹ️ pam_sss already present in common-password"
 fi
+
+# ----------------------------------------------------------------
 
 # ✅ Enable home directory creation
 if ! grep -q '^session[[:space:]]\+required[[:space:]]\+pam_mkhomedir.so' /etc/pam.d/common-session; then
@@ -34,6 +40,8 @@ else
     echo "ℹ️ pam_mkhomedir already present in common-session"
 fi
 
+# ----------------------------------------------------------------
+
 # ✅ Add pam_exec to common-session for GUI expired password notification
 if ! grep -q 'session optional pam_exec.so quiet expose_authtok' /etc/pam.d/common-session; then
     echo 'session optional pam_exec.so quiet expose_authtok' | sudo tee -a /etc/pam.d/common-session > /dev/null
@@ -42,11 +50,17 @@ else
     echo "ℹ️ pam_exec already present in common-session"
 fi
 
-# Check if running as root
-if [[ $EUID -ne 0 ]]; then
-  echo "❌ Please run this script as root (e.g., sudo)."
-  exit 1
+# ----------------------------------------------------------------
+
+# Check if line already exists
+if ! grep -Fxq "$PAM_EXEC_PROFILE" "$PAM_FILE"; then
+    echo "$PAM_EXEC_PROFILE" | sudo tee -a "$PAM_FILE" > /dev/null
+    echo "✅ Added to $PAM_FILE: $PAM_EXEC_PROFILE"
+else
+    echo "ℹ️ Already present in $PAM_FILE"
 fi
+
+# ----------------------------------------------------------------
 
 # Check if any pam_exec.so line exists
 if grep -q "^session optional pam_exec.so" "$PAM_FILE"; then
@@ -56,6 +70,13 @@ else
   echo "✅ Added pam_exec.so line to $PAM_FILE"
 fi
 
+# ----------------------------------------------------------------
 
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+  echo "❌ Please run this script as root (e.g., sudo)."
+  exit 1
+fi
 
+# ----------------------------------------------------------------
 
