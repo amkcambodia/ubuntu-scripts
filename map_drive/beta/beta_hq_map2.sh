@@ -6,6 +6,11 @@
 # //amkcambodia.com/amkdfs /media/Department-N    cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Dept_Doc/CIO/ITI,sec=ntlmssp,vers=3.0,user 0 0
 # //amkcambodia.com/amkdfs /media/Home-H          cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=StaffDoc/ITD/$USERNAME,sec=ntlmssp,vers=3.0,user 0 0
 
+mount.cifs "//amkcambodia.com/amkdfs" "/media/savi.toy/Collaboration-Q" \
+  -o credentials="/etc/smbcred/savi.toy",prefixpath="Collaboration/AHO/ITI",sec=ntlmssp,uid="savi.toy",gid="domain users",vers=3.0
+
+
+
 #-------------------------------------------------------
 
 USERNAME=$(logname)
