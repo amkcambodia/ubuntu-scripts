@@ -55,6 +55,7 @@
 
 # DFS CIFS Mount Script for AMK
 
+
 # Get the real logged-in user (even if run with sudo or via systemd)
 USERNAME=$(logname)
 USER_ID=$(id -u "$USERNAME")
