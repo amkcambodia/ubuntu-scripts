@@ -36,11 +36,11 @@ mkdir -p "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
 chown "$USERNAME:$USERNAME" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
 
 # Mount using user context (no sudo)
-mount.cifs "//$SERVER/$DFS_ROOT" "$COLLAB_MOUNTPOINT" \
+mount.cifs "//$SERVER/$DFS_ROOT/$COLLAB_PREFIXPATH" "$COLLAB_MOUNTPOINT" \
   -o credentials="$CREDENTIALS_FILE",prefixpath="$COLLAB_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
 
-mount.cifs "//$SERVER/$DFS_ROOT" "$DEPT_MOUNTPOINT" \
+mount.cifs "//$SERVER/$DFS_ROOT/$DEPT_PREFIXPATH" "$DEPT_MOUNTPOINT" \
   -o credentials="$CREDENTIALS_FILE",prefixpath="$DEPT_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
 
-mount.cifs "//$SERVER/$DFS_ROOT" "$HOME_MOUNTPOINT" \
+mount.cifs "//$SERVER/$DFS_ROOT/$HOME_PREFIXPATH" "$HOME_MOUNTPOINT" \
   -o credentials="$CREDENTIALS_FILE",prefixpath="$HOME_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
