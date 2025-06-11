@@ -25,6 +25,8 @@ if [ ! -f "$CREDENTIALS_FILE" ]; then
     exit 1
 fi
 
+#-------------------------------------------------------
+
 SERVER="amkcambodia.com"
 DFS_ROOT="amkdfs"
 
@@ -37,15 +39,19 @@ HOME_PREFIXPATH="StaffDoc/ITD/$USERNAME"
 COLLAB_MOUNTPOINT="/media/$USERNAME/Collaboration-Q"
 DEPT_MOUNTPOINT="/media/$USERNAME/Department-N"
 HOME_MOUNTPOINT="/media/$USERNAME/Home-H"
+MEDIA="/media/$USERNAME"
 
-# mkdir -p "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
-# chown "$USERNAME:$GROUP_ID" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+#-------------------------------------------------------
 
-sudo -u "$USERNAME" -- bash -c "mkdir -p '$COLLAB_MOUNTPOINT' '$DEPT_MOUNTPOINT' '$HOME_MOUNTPOINT'"
-sudo -u "$USERNAME" chmod 700 "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+mkdir -p  "$MEDIA" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+chown "$USERNAME:$GROUP_ID" "$MEDIA" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
 
+chmod 700 "$MEDIA" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+
+#-------------------------------------------------------
 
 # Mount using user context (no sudo)
+
 mount.cifs "//$SERVER/$DFS_ROOT/$COLLAB_PREFIXPATH" "$COLLAB_MOUNTPOINT" \
   -o credentials="$CREDENTIALS_FILE",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
 
@@ -54,3 +60,5 @@ mount.cifs "//$SERVER/$DFS_ROOT/$DEPT_PREFIXPATH" "$DEPT_MOUNTPOINT" \
 
 mount.cifs "//$SERVER/$DFS_ROOT/$HOME_PREFIXPATH" "$HOME_MOUNTPOINT" \
   -o credentials="$CREDENTIALS_FILE",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+
+#-------------------------------------------------------
