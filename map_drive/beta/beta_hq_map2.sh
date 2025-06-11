@@ -1,7 +1,46 @@
 #!/bin/bash
 
 
-# /etc/fstab
-//amkcambodia.com/amkdfs /media/Collaboration-Q cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Collaboration,sec=ntlmssp,vers=3.0,user 0 0
-//amkcambodia.com/amkdfs /media/Department-N    cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Dept_Doc/CIO/ITI,sec=ntlmssp,vers=3.0,user 0 0
-//amkcambodia.com/amkdfs /media/Home-H          cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=StaffDoc/ITD/$USERNAME,sec=ntlmssp,vers=3.0,user 0 0
+# # /etc/fstab
+# //amkcambodia.com/amkdfs /media/Collaboration-Q cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Collaboration,sec=ntlmssp,vers=3.0,user 0 0
+# //amkcambodia.com/amkdfs /media/Department-N    cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Dept_Doc/CIO/ITI,sec=ntlmssp,vers=3.0,user 0 0
+# //amkcambodia.com/amkdfs /media/Home-H          cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=StaffDoc/ITD/$USERNAME,sec=ntlmssp,vers=3.0,user 0 0
+
+#-------------------------------------------------------
+
+USERNAME=$(logname)
+USER_ID=$(id -u "$USERNAME")
+GROUP_ID=$(id -g "$USERNAME")
+CREDENTIALS_FILE="/etc/smbcred/$USERNAME"
+
+# Only run if credentials file exists
+if [ ! -f "$CREDENTIALS_FILE" ]; then
+    echo "Credentials file not found for $USERNAME"
+    exit 1
+fi
+
+SERVER="amkcambodia.com"
+DFS_ROOT="amkdfs"
+
+# DFS sub-paths
+COLLAB_PREFIXPATH="Collaboration/AHO/ITI"
+DEPT_PREFIXPATH="Dept_Doc/CIO/ITI"
+HOME_PREFIXPATH="StaffDoc/ITD/$USERNAME"
+
+# Mount points
+COLLAB_MOUNTPOINT="/media/$USERNAME/Collaboration-Q"
+DEPT_MOUNTPOINT="/media/$USERNAME/Department-N"
+HOME_MOUNTPOINT="/media/$USERNAME/Home-H"
+
+mkdir -p "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+chown "$USERNAME:$USERNAME" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+
+# Mount using user context (no sudo)
+mount.cifs "//$SERVER/$DFS_ROOT" "$COLLAB_MOUNTPOINT" \
+  -o credentials="$CREDENTIALS_FILE",prefixpath="$COLLAB_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+
+mount.cifs "//$SERVER/$DFS_ROOT" "$DEPT_MOUNTPOINT" \
+  -o credentials="$CREDENTIALS_FILE",prefixpath="$DEPT_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+
+mount.cifs "//$SERVER/$DFS_ROOT" "$HOME_MOUNTPOINT" \
+  -o credentials="$CREDENTIALS_FILE",prefixpath="$HOME_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
