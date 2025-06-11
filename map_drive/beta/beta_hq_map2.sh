@@ -28,7 +28,7 @@ SERVER="amkcambodia.com"
 DFS_ROOT="amkdfs"
 
 # DFS sub-paths
-COLLAB_PREFIXPATH="Collaboration/AHO/ITI"
+COLLAB_PREFIXPATH="Collaboration"
 DEPT_PREFIXPATH="Dept_Doc/CIO/ITI"
 HOME_PREFIXPATH="StaffDoc/ITD/$USERNAME"
 
