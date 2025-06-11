@@ -79,6 +79,7 @@ HOME_MOUNTPOINT="/media/Home-H"
 
 # Create mount directories if they do not exist
 mkdir -p "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
+chown "$USER_ID:$GROUP_ID" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNTPOINT"
 
 # Mount the Collaboration drive
 if mount -t cifs "//$SERVER/$DFS_ROOT" "$COLLAB_MOUNTPOINT" \
