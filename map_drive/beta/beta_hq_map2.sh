@@ -6,8 +6,8 @@
 # //amkcambodia.com/amkdfs /media/Department-N    cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=Dept_Doc/CIO/ITI,sec=ntlmssp,vers=3.0,user 0 0
 # //amkcambodia.com/amkdfs /media/Home-H          cifs credentials=/etc/smbcred/$USERNAME,uid=1000,gid=1000,prefixpath=StaffDoc/ITD/$USERNAME,sec=ntlmssp,vers=3.0,user 0 0
 
-mount.cifs "//amkcambodia.com/amkdfs" "/media/savi.toy/Collaboration-Q" \
-  -o credentials="/etc/smbcred/savi.toy",prefixpath="Collaboration/AHO/ITI",sec=ntlmssp,uid="savi.toy",gid="domain users",vers=3.0
+# mount.cifs "//amkcambodia.com/amkdfs" "/media/savi.toy/Collaboration-Q" \
+#   -o credentials="/etc/smbcred/savi.toy",prefixpath="Collaboration/AHO/ITI",sec=ntlmssp,uid="savi.toy",gid="domain users",vers=3.0
 
 
 
@@ -42,10 +42,10 @@ chown "$USERNAME:$USERNAME" "$COLLAB_MOUNTPOINT" "$DEPT_MOUNTPOINT" "$HOME_MOUNT
 
 # Mount using user context (no sudo)
 mount.cifs "//$SERVER/$DFS_ROOT/$COLLAB_PREFIXPATH" "$COLLAB_MOUNTPOINT" \
-  -o credentials="$CREDENTIALS_FILE",prefixpath="$COLLAB_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+  -o credentials="$CREDENTIALS_FILE",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
 
 mount.cifs "//$SERVER/$DFS_ROOT/$DEPT_PREFIXPATH" "$DEPT_MOUNTPOINT" \
-  -o credentials="$CREDENTIALS_FILE",prefixpath="$DEPT_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+  -o credentials="$CREDENTIALS_FILE",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
 
 mount.cifs "//$SERVER/$DFS_ROOT/$HOME_PREFIXPATH" "$HOME_MOUNTPOINT" \
-  -o credentials="$CREDENTIALS_FILE",prefixpath="$HOME_PREFIXPATH",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
+  -o credentials="$CREDENTIALS_FILE",sec=ntlmssp,uid="$USER_ID",gid="$GROUP_ID",vers=3.0,user
