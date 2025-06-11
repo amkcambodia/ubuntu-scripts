@@ -141,7 +141,7 @@ sudo systemctl daemon-reload
 echo "⚙️  Configuring smbcred.sh..."
 
 if [ ! -d /etc/smbcred ]; then
-    echo "📁 Setting up credential directory..."
+    echo "📁 Creating credential directory..."
     sudo mkdir -p /etc/smbcred
     sudo chown root:ubuntu-group /etc/smbcred
     sudo chmod 1770 /etc/smbcred

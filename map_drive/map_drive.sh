@@ -39,41 +39,56 @@ case "$SETUP_CHOICE" in
 
         # Copy new scripts
         echo ""
-        echo "🔧 Creating mount and unmount scripts..."
+        echo "🔧 Creating Map Drive Scripts..."
         # sudo cp ./map_drive/tasks/hq_map_drive.sh "$MOUNT_SCRIPT"
         sudo cp ./map_drive/beta/beta_hq_map2.sh "$MOUNT_SCRIPT"
         sudo cp ./map_drive/scripts/umount_hq.sh "$UMOUNT_SCRIPT"
 
         # Make them executable
         sudo chmod 755 "$MOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
-        sudo chmod 755 "$UMOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
+        # sudo chmod 755 "$UMOUNT_SCRIPT" && sudo chmod +x "$MOUNT_SCRIPT"
 
-        echo "✅ Mount script installed at: $MOUNT_SCRIPT"
-        echo "✅ Unmount script installed at: $UMOUNT_SCRIPT"
+        # echo "✅ Mount script installed at: $MOUNT_SCRIPT"
+        # echo "✅ Unmount script installed at: $UMOUNT_SCRIPT"
 
-        # --- Create the systemd service ---
-        echo ""
-        echo "🔧 Creating auto mount services ..."
-        SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
+        # # --- Create the systemd service ---
+        # echo ""
+        # echo "🔧 Creating auto mount services ..."
+        # SERVICE_FILE="/etc/systemd/system/mount-dfs.service"
 
-        if [ -f /etc/systemd/system/mount-dfs.service ]; then
-        sudo mkdir -p /etc/systemd/system/backup && sudo chmod 755 /etc/systemd/system/backup
-        mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/backup/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
-        fi
+        # if [ -f /etc/systemd/system/mount-dfs.service ]; then
+        # sudo mkdir -p /etc/systemd/system/backup && sudo chmod 755 /etc/systemd/system/backup
+        # mv /etc/systemd/system/mount-dfs.service /etc/systemd/system/backup/mount-dfs.service.bk-$(date +"%Y%m%d-%H%M%S")
+        # fi
         
-        ./map_drive/scripts/auto_mount_service.sh
-        sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
+        # ./map_drive/scripts/auto_mount_service.sh
+        # sudo chmod 755 "$SERVICE_FILE" && sudo chmod +x "$SERVICE_FILE"
+
+        # --------------------------------------------------------------------------------
+        ## Copy map drive template to mount path
+        echo ""
+        echo "🔧 Creating Map Drive Auto Mount Scripts..."
+
+        if [ -f /etc/xdg/autostart/mount-dfs.desktop ]; then
+        mv /etc/xdg/autostart/mount-dfs.desktop /etc/xdg/autostart/mount-dfs.desktop.bk-$(date +"%Y%m%d-%H%M%S")
+        fi
+
+        sudo cp ./map_drive/beta/hq_mount_dfs.desktop /etc/xdg/autostart/mount-dfs.desktop
+
+        echo "✅ Create Map Drive Auto completed successfully."
+
+        # --------------------------------------------------------------------------------
 
         # --- Reload and enable the service ---
         sudo systemctl daemon-reload
-        sudo systemctl enable mount-dfs.service
+        # sudo systemctl enable mount-dfs.service
 
         echo ""
         echo "✅ Mount and unmount scripts created at /usr/local/bin/amk"
-        echo "✅ Systemd service created: mount-dfs.service"
-        echo "👉 Run:   sudo systemctl start mount-dfs.service"
-        echo "👉 Run:   sudo systemctl status mount-dfs.service"
-        echo "👉 Stop:  sudo systemctl stop mount-dfs.service"
+        # echo "✅ Systemd service created: mount-dfs.service"
+        # echo "👉 Run:   sudo systemctl start mount-dfs.service"
+        # echo "👉 Run:   sudo systemctl status mount-dfs.service"
+        # echo "👉 Stop:  sudo systemctl stop mount-dfs.service"
         ;;
     2)
         echo "✅ Branch Staff setup selected."
